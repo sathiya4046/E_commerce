@@ -1,0 +1,7 @@
+#main{
+    height: 90vh;
+    background-image: linear-gradient(rgb(250, 161, 161),rgb(255, 255, 255));
+}
+#heading{
+    font-size: 5em;
+}

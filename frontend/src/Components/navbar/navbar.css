@@ -1,0 +1,13 @@
+#cart{
+    position: relative;
+    top: -10px;
+    right: 30px;
+    text-decoration: none;
+    color: red;
+    font-weight: 800;
+    font-size: 1.3em;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
