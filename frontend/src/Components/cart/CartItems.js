@@ -54,8 +54,8 @@ const CartItems = () => {
                 </div>
                 <div className='col-md-4'>
                     <p className='ms-md-5'>If you have a promo code, Enter here</p>
-                    <input className=' mx-md-5 text-center p-2' type="text" placeholder='promo code' />
-                    <button className='my-md-2 p-2 btn btn-outline-dark'>Submit</button>
+                    <input className='rounded border me-3 mx-md-5 text-center p-2' type="text" placeholder='promo code' />
+                    <button className='my-md-2 p-2 btn btn-dark'>Submit</button>
                 </div>
             </div>
         </div>

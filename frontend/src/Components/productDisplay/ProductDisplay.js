@@ -34,7 +34,7 @@ const ProductDisplay = ({id,image,name,oldPrice,newPrice}) => {
                     <p>XL</p>
                     <p>XXL</p>
                 </div>
-                <button onClick={()=>addToCart(id)} className='btn btn-success rounded-pill'>{add? "Add to cart": "Added"}</button>
+                <button onClick={()=>addToCart(id)} className='btn btn-success rounded-pill'>{add? "Added"  :"Add to cart"}</button>
             </div>
         </div>
     </div>

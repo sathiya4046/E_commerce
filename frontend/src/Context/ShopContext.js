@@ -36,10 +36,10 @@ const ShopContextProvider = ({children})=>{
 
     const addToCart = async (itemId)=>{
         setTimeout(()=>{
-            setAdd(true)
+            setAdd(false)
         },1000)
         setCartItems(e=>({...e,[itemId]:e[itemId]+1}))
-        setAdd(false)
+        setAdd(true)
         if(localStorage.getItem('token')){
             const response =await axios.post('http://localhost:4000/addtocart',{"itemId":itemId},{
                 headers:{
