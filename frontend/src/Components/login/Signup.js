@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import {Link} from 'react-router-dom' 
 
 
 const Signup = () => {
@@ -12,19 +13,14 @@ const Signup = () => {
     const signUp = async (e) =>{
         e.preventDefault()
         try{
-        await axios.post('http://localhost:4000/register', user)
-        .then(res=>{
+        const res = await axios.post('http://localhost:4000/register', user)
             if(res.data.Status==='Success'){
             localStorage.setItem("token",res.data.token)
             window.location.replace('/')
             console.log(res)
-            }else{
-            alert(res.data.Error)
             }
-        })
-        .then(err=>console.log(err))
         }catch(error){
-        return console.log(error)
+            return console.log(error)
         }
     }
 
@@ -88,8 +84,8 @@ const Signup = () => {
             </div>
             <div className='text-start my-2 py-2'>
                 { state === "Sign-up" ? 
-                    <p>If you have account click here <span onClick={()=>setState("Login")} className='text-primary'>Login</span></p> 
-                    :<p>Don't have account click here <span onClick={()=>setState("Sign-up")} className='text-primary'>Signup</span></p> }
+                    <p>If you have account click here <Link onClick={()=>setState("Login")} className='text-primary'> Login</Link></p> 
+                    :<p>Don't have account click here <Link onClick={()=>setState("Sign-up")} className='text-primary'>Signup</Link></p> }
             </div>
         </form>
     </div>

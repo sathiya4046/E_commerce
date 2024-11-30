@@ -6,6 +6,7 @@ import { ShopContext } from '../../Context/ShopContext'
 
 const ProductDisplay = ({id,image,name,oldPrice,newPrice}) => {
     const {addToCart,add} = useContext(ShopContext)
+    const token = localStorage.getItem('token')
   return (
     <div className='container'>
         <div className='row'>
@@ -34,7 +35,7 @@ const ProductDisplay = ({id,image,name,oldPrice,newPrice}) => {
                     <p>XL</p>
                     <p>XXL</p>
                 </div>
-                <button onClick={()=>addToCart(id)} className='btn btn-success rounded-pill'>{add? "Added"  :"Add to cart"}</button>
+                <button onClick={()=>{token ? addToCart(id) : window.location.replace('/signup')}} className='btn btn-success rounded-pill'>{add? "Added"  :"Add to cart"}</button>
             </div>
         </div>
     </div>
