@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react'
-import all_product from '../assets/Frontend_Assets/all_product'
+import React, { createContext, useEffect, useState } from 'react'
+import axios from 'axios'
 
 export const ShopContext = createContext(null)
 
 const getDefaultCart = ()=>{
     let cart = {}
-    for (let i = 0; i < all_product.length+1; i++) {
+    for (let i = 0; i < 300+1; i++) {
         cart[i]=0   
     }
     return cart
@@ -13,18 +13,52 @@ const getDefaultCart = ()=>{
 }
 
 const ShopContextProvider = ({children})=>{
+    const [all_product,setall_Product] = useState([])
+
     const [cartItems, setCartItems] = useState(getDefaultCart())
     const [add,setAdd] = useState(false)
 
-    const addToCart = (itemId)=>{
+    useEffect(()=>{
+        const fetchData = async()=>{
+            const response = await axios.get('http://localhost:4000/allproducts')
+            setall_Product(response.data.products)
+
+            if(localStorage.getItem('token')){
+                const res = await axios.get('http://localhost:4000/getcart',{
+                    headers:{
+                        "Authorization":`${localStorage.getItem('token')}`
+                    }})
+                    setCartItems(res.data)
+            }
+        }
+        fetchData()
+    },[])
+
+    const addToCart = async (itemId)=>{
         setTimeout(()=>{
             setAdd(true)
         },1000)
         setCartItems(e=>({...e,[itemId]:e[itemId]+1}))
         setAdd(false)
+        if(localStorage.getItem('token')){
+            const response =await axios.post('http://localhost:4000/addtocart',{"itemId":itemId},{
+                headers:{
+                    "Authorization":`${localStorage.getItem('token')}`
+                }
+            })
+            console.log(response)
+        }
     }
-    const removeFromCart = (itemId)=>{
+    const removeFromCart = async (itemId)=>{
         setCartItems(prev=>({...prev,[itemId]:prev[itemId]-1}))
+        if(localStorage.getItem('token')){
+            const response =await axios.post('http://localhost:4000/removefromcart',{"itemId":itemId},{
+                headers:{
+                    "Authorization":`${localStorage.getItem('token')}`
+                }
+            })
+            console.log(response)
+        }
     }
     const getTotalCartAmount = ()=>{
         let totalAmount = 0

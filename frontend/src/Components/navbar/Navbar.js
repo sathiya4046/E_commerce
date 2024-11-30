@@ -32,7 +32,17 @@ const Navbar = () => {
                   <Link className="nav-link mx-3" to={'/mens'}>Mens</Link>
                 </li>
               </ul>
-              <Link to={'/signup'}><button type="button" className="btn btn-outline-success rounded-pill mx-3">Signup</button></Link>
+              <Link to={'/signup'}>
+                {
+                  localStorage.getItem('token') ?
+                  <button  
+                    type="button" 
+                    className="btn btn-outline-success rounded-pill mx-3"
+                    onClick={()=>{localStorage.removeItem('token');window.location.replace('/')}}
+                    >Logout</button>
+                  :<button type="button" className="btn btn-outline-success rounded-pill mx-3">Login</button>
+                }
+              </Link>
               <Link to={'/cart'}><IoCartOutline className='fs-2 mx-4'/><span id='cart'>{getTotalCartItems()}</span></Link>
             </div>
         </nav>

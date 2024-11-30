@@ -1,8 +1,17 @@
-import React from 'react'
-import data_product from '../../assets/Frontend_Assets/data'
+import React, { useEffect, useState } from 'react'
 import './popular.css'
+import axios from 'axios'
 
 const Popular = () => {
+  const [data_product,setData_product] = useState([])
+
+  useEffect(()=>{
+    const fetchData = async ()=>{
+      const response = await axios.get('http://localhost:4000/popularinwomen')
+      setData_product(response.data)
+    }
+    fetchData()
+  },[])
   return (
     <div id='popular' className='container-fluid'>
         <h1 className='text-center'>POPULAR IN WOMEN</h1>
@@ -11,7 +20,7 @@ const Popular = () => {
             {data_product.map(item=>(
                <div key={item.id}>
                 <img className='mx-md-2' src={item.image} alt="Collections_of_images" height={300} width={250}/>
-                <p className='fs-5 my-2'>{item.name}</p>
+                <p className='my-2'>{item.name}</p>
                 <div className='my-3'>Price: <span>{`$${item.new_price}`}</span> <span className='mx-2 oldprice'>{`$${item.old_price}`}</span></div>
                </div>
             ))}

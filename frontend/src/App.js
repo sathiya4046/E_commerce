@@ -6,7 +6,6 @@ import menBanner from './assets/Frontend_Assets/banner_mens.png'
 import womenBanner from './assets/Frontend_Assets/banner_women.png'
 import kidBanner from './assets/Frontend_Assets/banner_kids.png'
 import Signup from "./Components/login/Signup";
-import Login from "./Components/login/Login";
 import Footer from "./Components/footer/Footer";
 import ShopCategory from "./Components/shopCategory/ShopCategory";
 import Product from "./Components/product/Product";
@@ -42,7 +41,6 @@ function App() {
               <Route path=":productId" element={<Product/>}/>
         </Route>
         <Route path="/signup" element={<Signup/>}/>
-        <Route path="/login" element={<Login/>}/>
         <Route path="/cart" element={<CartItems/>}/>
       </Routes>
       <Footer/>

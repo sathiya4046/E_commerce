@@ -1,7 +1,18 @@
-import React from 'react'
-import collections from '../../assets/Frontend_Assets/new_collections'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
 
 const NewCollection = () => {
+  const [collections,setCollections] = useState([])
+
+  useEffect(()=>{
+    const fetchData = async ()=>{
+      const response = await axios.get('http://localhost:4000/newcollections')
+      setCollections(response.data)
+    }
+    fetchData()
+  },[])
+  
   return (
     <div className='container-fluid'>
         <h1 className='text-center'>NEW COLLECTIONS</h1>
