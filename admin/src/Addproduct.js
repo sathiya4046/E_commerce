@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from'axios'
 import upload_area from './assets/Admin_Assets/upload_area.svg'
+import { baseUrl } from './constant/url'
 
 const Addproduct = () => {
   const [image,setImage] = useState(false)
@@ -17,13 +18,25 @@ const Addproduct = () => {
     e.preventDefault()
     const formdata = new FormData()
     formdata.append('product',image)
-    const response = await axios.post('http://localhost:4000/upload',formdata)
-    console.log(response)
-    if(response.data.success){
+    try{
+      const response = await axios.post(`${baseUrl}/upload`,formdata)
+      console.log(response)
+
+      if(response.data.success){
       product.image = response.data.image_url
       console.log(product)
-      const res = await axios.post('http://localhost:4000/addproduct',product)
+      const res = await axios.post(`${baseUrl}/addproduct`,product)
       res.data.success ? alert("Product added") : alert("Failed")
+      setProduct({
+        name:"",
+        image:"",
+        category:"women",
+        new_price:"",
+        old_price:""
+      })
+      }
+    }catch(error){
+      console.log(error)
     }
   }
 

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { baseUrl } from '../../constant/url'
 
 
 const NewCollection = () => {
@@ -7,7 +8,7 @@ const NewCollection = () => {
 
   useEffect(()=>{
     const fetchData = async ()=>{
-      const response = await axios.get('http://localhost:4000/newcollections')
+      const response = await axios.get(`${baseUrl}/newcollections`)
       setCollections(response.data)
     }
     fetchData()

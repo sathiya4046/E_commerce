@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './popular.css'
 import axios from 'axios'
+import {baseUrl} from '../../constant/url'
 
 const Popular = () => {
   const [data_product,setData_product] = useState([])
 
   useEffect(()=>{
     const fetchData = async ()=>{
-      const response = await axios.get('http://localhost:4000/popularinwomen')
+      const response = await axios.get(`${baseUrl}/popularinwomen`)
       setData_product(response.data)
     }
     fetchData()

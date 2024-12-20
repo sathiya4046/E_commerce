@@ -4,6 +4,7 @@ import { FaShopify} from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { IoCartOutline } from "react-icons/io5";
 import { ShopContext } from '../../Context/ShopContext';
+import Cookies from 'js-cookie'
 
 
 const Navbar = () => {
@@ -12,7 +13,7 @@ const Navbar = () => {
       <div className='sticky-top'>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <FaShopify className='fs-1 ms-4'/>
-            <Link className="navbar-brand mx-md-4" to={'/'}>SHOPPER</Link>
+            <Link className="navbar-brand mx-md-4" to={'/'}>SHOP-MART</Link>
             <button className="navbar-toggler me-3" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
@@ -34,11 +35,11 @@ const Navbar = () => {
               </ul>
               <Link to={'/signup'}>
                 {
-                  localStorage.getItem('token') ?
+                  Cookies.get('token') ?
                   <button  
                     type="button" 
                     className="btn btn-outline-success rounded-pill mx-3"
-                    onClick={()=>{localStorage.removeItem('token');window.location.replace('/')}}
+                    onClick={()=>{Cookies.remove('token');window.location.replace('/')}}
                     >Logout</button>
                   :<button type="button" className="btn btn-outline-success rounded-pill mx-3">Login</button>
                 }

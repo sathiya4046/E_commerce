@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { baseUrl } from '../constant/url'
+import Cookies from 'js-cookie'
 
 export const ShopContext = createContext(null)
 
@@ -20,14 +22,11 @@ const ShopContextProvider = ({children})=>{
 
     useEffect(()=>{
         const fetchData = async()=>{
-            const response = await axios.get('http://localhost:4000/allproducts')
+            const response = await axios.get(`${baseUrl}/allproducts`)
             setall_Product(response.data.products)
 
-            if(localStorage.getItem('token')){
-                const res = await axios.get('http://localhost:4000/getcart',{
-                    headers:{
-                        "Authorization":`${localStorage.getItem('token')}`
-                    }})
+            if(Cookies.get('token')){
+                const res = await axios.get(`${baseUrl}/getcart`,{withCredentials:true})
                     setCartItems(res.data)
             }
         }
@@ -40,23 +39,15 @@ const ShopContextProvider = ({children})=>{
         },1000)
         setCartItems(e=>({...e,[itemId]:e[itemId]+1}))
         setAdd(true)
-        if(localStorage.getItem('token')){
-            const response =await axios.post('http://localhost:4000/addtocart',{"itemId":itemId},{
-                headers:{
-                    "Authorization":`${localStorage.getItem('token')}`
-                }
-            })
+        if(Cookies.get('token')){
+            const response =await axios.post(`${baseUrl}/addtocart`,{"itemId":itemId},{withCredentials:true})
             console.log(response)
         }
     }
     const removeFromCart = async (itemId)=>{
         setCartItems(prev=>({...prev,[itemId]:prev[itemId]-1}))
-        if(localStorage.getItem('token')){
-            const response =await axios.post('http://localhost:4000/removefromcart',{"itemId":itemId},{
-                headers:{
-                    "Authorization":`${localStorage.getItem('token')}`
-                }
-            })
+        if(Cookies.get('token')){
+            const response =await axios.post(`${baseUrl}/removefromcart`,{"itemId":itemId},{withCredentials:true})
             console.log(response)
         }
     }

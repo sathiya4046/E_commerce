@@ -1,12 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import cross_icon from './assets/Admin_Assets/cross_icon.png'
+import { baseUrl } from './constant/url'
 
 const Productlist = () => {
   const [all_product, setAll_product] = useState([])
 
   const fetchData =async () =>{
-    const response = await axios.get('http://localhost:4000/allproducts')
+    const response = await axios.get(`${baseUrl}/allproducts`)
     setAll_product(response.data.products)
   }
 
@@ -15,7 +16,7 @@ const Productlist = () => {
   },[])
 
   const removeFromCart = async(id) =>{
-    await axios.delete(`http://localhost:4000/removeproduct/${id}`)
+    await axios.delete(`${baseUrl}/removeproduct/${id}`)
     await fetchData()
   }
   return (

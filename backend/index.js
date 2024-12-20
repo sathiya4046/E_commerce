@@ -5,20 +5,33 @@ import multer from 'multer'
 import path from 'path'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
+import Product from './model/productSchema.js'
+import User from './model/userSchema.js'
 
-const port = 4000
+
+dotenv.config()
+
 const app = express()
+const port = process.env.PORT
+const dirname = path.resolve()
 
 app.use(express.json())
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({
+    origin:["http://localhost:3000"],
+    methods:["POST","GET","PUT","DELETE"],
+    credentials: true
+}))
 
-mongoose.connect('mongodb://localhost:27017/ecommerce')
+mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log('Connected'))
 
 // image storage
 
 const storage = multer.diskStorage({
-    destination:'./upload/images',
+    destination:'./backend/upload/images',
     filename: (req,file,cb) =>{
         return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
     }
@@ -26,7 +39,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage:storage})
 
-app.use('/images',express.static('upload/images'))
+app.use('/images',express.static('backend/upload/images'))
 
 app.post('/upload',upload.single('product'),(req,res)=>{
     res.json({
@@ -35,18 +48,6 @@ app.post('/upload',upload.single('product'),(req,res)=>{
     })
 })
 
-// create products
-
-const Product = mongoose.model('Product',{
-    id:{ type: Number, required:true },
-    name : { type:String, required:true },
-    image : { type:String, required: true },
-    category : {type:String, required: true},
-    new_price: { type:Number, required: true },
-    old_price: { type:Number, required:true },
-    date: {type:Date, default:Date.now },
-    available :{type:Boolean, default: true}
-})
 
 app.post('/addproduct', async (req,res)=>{
 
@@ -110,17 +111,6 @@ app.get('/popularinwomen', async (req,res)=>{
     res.json(product_in_women)
 })
 
-//Register and login schema
-
-const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    cartData:{ type:Object },
-    date:{ type:Date, default:Date.now }
-});
-
-const User = mongoose.model("users",UserSchema)
 
 //-------------- Register ----------
 
@@ -147,8 +137,14 @@ app.post('/register',async (req,res)=>{
                 password:hashPassword,
                 cartData:cart
             })
-                const token = jwt.sign({ id: user._id }, "jwt-private-key", { expiresIn: '1h' });
-                res.json({Status:"Success",token})
+                const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '10d'});
+                res.cookie("token", token, {
+                    maxAge:10*24*60*1000,
+                    httpOnly: false,
+                    secure: true, 
+                    sameSite:"strict"
+                  })
+                res.json({Status:"Success"})
         }
     }catch(error){
         console.log(error)
@@ -164,8 +160,14 @@ app.post('/login',async (req,res)=>{
         if(user){
             const comparePassword =await bcrypt.compare(password,user.password)
             if (!comparePassword) return res.json({Status:'Invalid credentials'});
-            const token = jwt.sign({ id: user._id }, "jwt-private-key", { expiresIn: '1h' });
-            res.json({Status:"Success", token});
+            const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '10d' });
+            res.cookie("token", token, {
+                maxAge:10*24*60*1000,
+                httpOnly: false,
+                secure: true, 
+                sameSite:"strict"
+              })
+            res.json({Status:"Success"});
         }else{
             return res.json({message:"Email already exists"})
         }
@@ -177,11 +179,11 @@ app.post('/login',async (req,res)=>{
 // middleware
 
 const verifyUser = (req,res,next)=>{
-    const token = req.headers.authorization
+    const token = req.cookies.token
     if(!token){
-        res.json({Status:"Unauthorized"})
+        res.json({Status:"No token"})
     }else{
-        jwt.verify(token,"jwt-private-key",(err,decoded)=>{
+        jwt.verify(token,process.env.SECRET_KEY,(err,decoded)=>{
             if(err){
                 res.json({Status:"Unauthorized"})
             }else{
@@ -219,6 +221,13 @@ app.get('/getcart',verifyUser, async(req,res)=>{
     res.json(userData.cartData)
 })
 
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(dirname,"/frontend/build")))
+    app.use("*",(req,res)=>{
+        res.sendFile(path.resolve(dirname,"frontend","build","index.html"))
+    })
+}
+
 app.listen(port,()=>{
-    console.log("Server running")
+    console.log(`Server running on ${port}`)
 })

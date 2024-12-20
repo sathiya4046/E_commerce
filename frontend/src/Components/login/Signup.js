@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom' 
+import {baseUrl} from '../../constant/url'
 
 
 const Signup = () => {
@@ -13,9 +14,8 @@ const Signup = () => {
     const signUp = async (e) =>{
         e.preventDefault()
         try{
-        const res = await axios.post('http://localhost:4000/register', user)
+        const res = await axios.post(`${baseUrl}/register`, user,{withCredentials:true})
             if(res.data.Status==='Success'){
-            localStorage.setItem("token",res.data.token)
             window.location.replace('/')
             console.log(res)
             }
@@ -27,14 +27,13 @@ const Signup = () => {
     const login = async (e) =>{
         e.preventDefault()
         try{
-        await axios.post('http://localhost:4000/login', user)
+        await axios.post(`${baseUrl}/login`, user,{withCredentials:true})
         .then(res=>{
             if(res.data.Status==='Success'){
-            localStorage.setItem("token",res.data.token)
             window.location.replace('/')
             console.log(res)
             }else{
-            alert(res.data.Error)
+            alert("Please Sign-Up")
             }
         })
         .then(err=>console.log(err))

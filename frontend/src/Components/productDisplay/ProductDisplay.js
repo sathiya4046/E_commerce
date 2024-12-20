@@ -3,10 +3,11 @@ import icon from '../../assets/Frontend_Assets/star_icon.png'
 import icond from '../../assets/Frontend_Assets/star_dull_icon.png'
 import './productDisplay.css'
 import { ShopContext } from '../../Context/ShopContext'
+import Cookies from 'js-cookie'
 
 const ProductDisplay = ({id,image,name,oldPrice,newPrice}) => {
     const {addToCart,add} = useContext(ShopContext)
-    const token = localStorage.getItem('token')
+    const token = Cookies.get('token')
   return (
     <div className='container'>
         <div className='row'>
