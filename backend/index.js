@@ -19,8 +19,9 @@ const dirname = path.resolve()
 
 app.use(express.json())
 app.use(cookieParser())
+
 app.use(cors({
-    origin:["*"],
+    origin:["https://e-commerce-fgki.onrender.com/","https://e-commerce-admin-87jj.onrender.com/"],
     methods:["POST","GET","PUT","DELETE"],
     credentials: true
 }))

@@ -8,14 +8,14 @@ const Footer = () => {
         <div className='d-flex flex-column text-center'>
         <div className='m-4'>
             <FaShopify className='fs-1 mx-3 mb-2 '/>
-            <Link className="navbar-brand ms-1 fs-3" to={'/'}>SHOPPER</Link>
+            <Link className="navbar-brand ms-1 fs-3" to={'/'}>SHOP-MART</Link>
         </div>
         <ul className='list-unstyled d-flex mx-auto'>
-            <li className='mx-3'>Company</li>
-            <li className='mx-3'>Products</li>
-            <li className='mx-3'>Offices</li>
-            <li className='mx-3'>About</li>
-            <li className='mx-3'>Contact</li>
+            <li className='px-2'>Company</li>
+            <li className='px-2'>Products</li>
+            <li className='px-2'>Offices</li>
+            <li className='px-2'>About</li>
+            <li className='px-2'>Contact</li>
         </ul>
         <div className='d-flex mx-auto'>
             <FaInstagram className='mx-3 fs-4'/>
