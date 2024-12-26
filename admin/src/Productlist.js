@@ -36,7 +36,7 @@ const Productlist = () => {
                 {all_product.map((e,i)=>{
                         return <tbody  key={i}>
                                     <tr className='text-start'>
-                                        <td><img src={e.image} alt="cartimage" width={100} height={80} /></td>
+                                        <td><img src={`https://e-commerce-fgki.onrender.com/images/${e.image}`} alt="cartimage" width={100} height={80} /></td>
                                         <td><p>{e.name}</p></td>
                                         <td><p>${e.old_price}</p></td>
                                         <td><p>{e.new_price}</p></td>
