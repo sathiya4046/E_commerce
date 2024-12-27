@@ -29,6 +29,7 @@ app.use(cookieParser())
 
 app.use(cors({
     origin:["https://e-commerce-admin-87jj.onrender.com"],
+    // origin:["http://localhost:3000"],
     methods:["POST","GET","PUT","DELETE"],
     credentials: true
 }))
@@ -95,6 +96,11 @@ app.post('/addproduct', async (req,res)=>{
 // Delete product
 
 app.delete('/removeproduct/:id',async (req,res)=>{
+    const data = await Product.findOne({id:req.params.id})
+    const imageUrl = data.image
+
+    await cloudinary.uploader.destroy(imageUrl.split('/').pop().split('.')[0])
+
     await Product.findOneAndDelete({id:req.params.id})
     res.json({
         success:true,
