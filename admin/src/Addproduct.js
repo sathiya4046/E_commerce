@@ -5,6 +5,7 @@ import { baseUrl } from './constant/url'
 
 const Addproduct = () => {
   const [image,setImage] = useState(false)
+  const [added, setAdded] = useState(false)
   const [product,setProduct] = useState({
     name:"",
     image:"",
@@ -16,17 +17,17 @@ const Addproduct = () => {
 
   const handleSubmit =async (e) =>{
     e.preventDefault()
+    setAdded(true)
     const formdata = new FormData()
-    formdata.append('product',image)
+    formdata.append('image',image)
+    
     try{
       const response = await axios.post(`${baseUrl}/upload`,formdata)
-      console.log(response)
 
       if(response.data.success){
       product.image = response.data.image_url
-      console.log(product)
       const res = await axios.post(`${baseUrl}/addproduct`,product)
-      res.data.success ? alert("Product added") : alert("Failed")
+      res.data.success ? setAdded(false) : alert("Failed")
       setProduct({
         name:"",
         image:"",
@@ -34,6 +35,9 @@ const Addproduct = () => {
         new_price:"",
         old_price:""
       })
+      setImage(false)
+      }else{
+        console.log("upload error")
       }
     }catch(error){
       console.log(error)
@@ -104,7 +108,7 @@ const Addproduct = () => {
           />
         </div>
         <div className=' m-2'>
-          <button className='w-100 btn btn-success rounded-pill'>ADD</button>
+          <button disabled={added} className='w-100 btn btn-success rounded-pill'>ADD</button>
         </div>
       </form>
     </div>

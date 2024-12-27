@@ -9,9 +9,16 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import Product from './model/productSchema.js'
 import User from './model/userSchema.js'
+import {v2 as cloudinary} from 'cloudinary'
 
 
 dotenv.config()
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
 const app = express()
 const port = process.env.PORT
@@ -31,23 +38,31 @@ mongoose.connect(process.env.MONGO_URL)
 
 // image storage
 
-const storage = multer.diskStorage({
-    destination:'./backend/upload/images',
-    filename: (req,file,cb) =>{
-        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.json({ message: 'No file uploaded' });
     }
-})
+    const result = await cloudinary.uploader.upload_stream({ resource_type: 'auto'},(error, result) => {
+        if (error) {
+          return res.json({ message: 'Error uploading file', error });
+        }
+        res.status(200).json({
+          success: true,
+          image_url: result.secure_url,
+        });
+      }
+    );
+    result.end(req.file.buffer);
 
-const upload = multer({storage:storage})
-
-app.use('/images',express.static('backend/upload/images'))
-
-app.post('/upload',upload.single('product'),(req,res)=>{
-    res.json({
-        success:true,
-        image_url:`https://e-commerce-fgki.onrender.com/images/${req.file.filename}`
-    })
-})
+  } catch (error) {
+    console.error(error);
+    res.json({ message: 'Server error' });
+  }
+});
 
 
 app.post('/addproduct', async (req,res)=>{
@@ -69,9 +84,7 @@ app.post('/addproduct', async (req,res)=>{
         new_price:req.body.new_price,
         old_price:req.body.old_price
     })
-    console.log(product)
     product.save()
-    console.log("saved")
     res.json({
         success:true,
         name:req.body.name
