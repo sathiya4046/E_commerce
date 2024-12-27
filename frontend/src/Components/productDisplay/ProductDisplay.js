@@ -12,7 +12,7 @@ const ProductDisplay = ({id,image,name,oldPrice,newPrice}) => {
     <div className='container'>
         <div className='row'>
             <div className='col'>
-                <img className='m-5 ps-3' src={image} alt="productimage" />
+                <img className='my-5 mx-md-3 ps-3' src={image} alt="productimage" />
             </div>
             <div className='col'>
                 <h1 className='mt-md-5'>{name}</h1>
