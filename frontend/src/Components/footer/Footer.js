@@ -11,11 +11,10 @@ const Footer = () => {
             <Link className="navbar-brand ms-1 fs-3" to={'/'}>SHOP-MART</Link>
         </div>
         <ul className='list-unstyled d-flex mx-auto'>
-            <li className='px-2'>Company</li>
+            <li className='px-md-2'>Company</li>
             <li className='px-2'>Products</li>
-            <li className='px-2'>Offices</li>
             <li className='px-2'>About</li>
-            <li className='px-2'>Contact</li>
+            <li className='px-md-2'>Contact</li>
         </ul>
         <div className='d-flex mx-auto'>
             <FaInstagram className='mx-3 fs-4'/>

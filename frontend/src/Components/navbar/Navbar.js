@@ -11,7 +11,7 @@ const Navbar = () => {
   const {getTotalCartItems} = useContext(ShopContext)
   return (
       <div className='sticky-top'>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <nav className="navbar navbar-expand-lg navbar-light bg-light bg-opacity-50">
             <FaShopify className='fs-1 ms-4'/>
             <Link className="navbar-brand mx-md-4" to={'/'}>SHOP-MART</Link>
             <button className="navbar-toggler me-3" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
